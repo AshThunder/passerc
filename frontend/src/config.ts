@@ -5,6 +5,6 @@ export const CONTRACT_ADDRESSES = {
 };
 
 export const SEPOLIA_CHAIN_ID = 11155111;
-export const SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
+export const SEPOLIA_RPC = (import.meta as any).env?.VITE_SEPOLIA_RPC || "https://ethereum-sepolia-rpc.publicnode.com";
 
 export const MOCK_MODE = false; // Using real CoFHE on Sepolia
