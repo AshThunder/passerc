@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>PASSERC Global Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00FFA3",
+                        "secondary": "#BB86FC",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#0f231c",
+                        "surface-dark": "#121212",
+                        "border-dark": "#1d3a31",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Space Grotesk', sans-serif;
+                background-color: #0f231c;
+            }
+        }
+        .glow-primary {
+            box-shadow: 0 0 20px rgba(0, 255, 163, 0.15);
+        }
+        .glow-secondary {
+            box-shadow: 0 0 20px rgba(187, 134, 252, 0.1);
+        }
+        .glass-card {
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 163, 0.1);
+        }
+        .modal-pulse {
+            box-shadow: 0 0 0 0 rgba(0, 255, 163, 0.4);
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 163, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(0, 255, 163, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 163, 0);
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 min-h-screen font-display overflow-hidden">
+    <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-md"></div>
+        <div
+            class="relative w-full max-w-md bg-[#121212] border-2 border-primary rounded-2xl p-8 shadow-2xl glow-primary">
+            <div class="flex flex-col items-center text-center">
+                <div
+                    class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center border border-primary/30 mb-6">
+                    <span class="material-symbols-outlined text-primary text-5xl">shield_lock</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">Reveal Protected Balances</h2>
+                <p class="text-slate-400 text-sm mb-8 px-4">
+                    Enter your Encryption Password to decrypt and view your FHERC20 balances.
+                </p>
+                <div class="w-full space-y-6">
+                    <div class="relative group">
+                        <label
+                            class="block text-left text-xs font-semibold text-secondary uppercase tracking-widest mb-2 ml-1">Encryption
+                            Password</label>
+                        <div class="relative">
+                            <input
+                                class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:outline-none focus:border-primary/50 transition-all pr-12"
+                                placeholder="••••••••••••" type="password" />
+                            <button
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-secondary transition-colors">
+                                <span class="material-icons-round text-xl">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full bg-primary text-background-dark font-bold py-4 rounded-xl transition-all modal-pulse hover:brightness-110 active:scale-[0.98]">
+                        Decrypt &amp; Reveal
+                    </button>
+                    <a class="inline-block text-secondary/70 hover:text-secondary text-sm font-medium transition-colors border-b border-transparent hover:border-secondary/50 pb-0.5"
+                        href="#">
+                        Cancel and Return
+                    </a>
+                </div>
+                <div class="mt-8 flex items-center gap-2">
+                    <div class="h-px w-8 bg-gradient-to-r from-transparent to-secondary/20"></div>
+                    <span class="text-[10px] text-slate-600 uppercase tracking-tighter">Secure FHE Session</span>
+                    <div class="h-px w-8 bg-gradient-to-l from-transparent to-secondary/20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="sticky top-0 z-50 border-b border-primary/10 bg-background-dark/80 backdrop-blur-md px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center glow-primary">
+                    <span class="material-icons-round text-background-dark font-bold">lock</span>
+                </div>
+                <span class="text-2xl font-bold tracking-tight text-white">PASSERC</span>
+                <span
+                    class="hidden md:block px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-xs rounded-full ml-2">FHENIX
+                    MAINNET</span>
+            </div>
+            <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-400">
+                <a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+                <a class="hover:text-primary transition-colors" href="#">Wrap / Unwrap</a>
+                <a class="hover:text-primary transition-colors" href="#">Privacy Pool</a>
+                <a class="hover:text-primary transition-colors" href="#">Governance</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="p-2 rounded-full hover:bg-white/5 transition-colors">
+                    <span class="material-icons-round">notifications</span>
+                </button>
+                <button
+                    class="bg-primary hover:bg-primary/90 text-background-dark font-bold px-6 py-2.5 rounded-full transition-all flex items-center gap-2 glow-primary">
+                    <span class="material-icons-round text-sm">account_balance_wallet</span>
+                    Connect Wallet
+                </button>
+            </div>
+        </div>
+    </nav>
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <section class="mb-10">
+            <div
+                class="relative overflow-hidden glass-card rounded-xl p-8 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="relative z-10">
+                    <h2 class="text-slate-400 text-sm font-medium mb-1">Total Value Protected (TVP)</h2>
+                    <div class="flex items-baseline gap-3">
+                        <span class="text-5xl font-bold text-white tracking-tight">$1,248,502.42</span>
+                        <span class="text-primary text-sm font-semibold flex items-center">
+                            <span class="material-icons-round text-sm">trending_up</span> 12.5%
+                        </span>
+                    </div>
+                    <p class="text-slate-500 mt-4 max-w-md">Your confidential assets are encrypted using Fhenix's Fully
+                        Homomorphic Encryption (FHE) technology.</p>
+                </div>
+                <div class="flex gap-4">
+                    <div
+                        class="flex flex-col items-center justify-center glass-card border-secondary/20 p-6 rounded-xl w-32 glow-secondary">
+                        <span class="text-secondary text-2xl font-bold">12</span>
+                        <span class="text-slate-500 text-xs">Tokens</span>
+                    </div>
+                    <div
+                        class="flex flex-col items-center justify-center glass-card border-primary/20 p-6 rounded-xl w-32 glow-primary">
+                        <span class="text-primary text-2xl font-bold">FHE</span>
+                        <span class="text-slate-500 text-xs">Active</span>
+                    </div>
+                </div>
+                <div class="absolute right-0 top-0 w-1/2 h-full opacity-20 pointer-events-none">
+                    <div class="absolute inset-0 bg-gradient-to-l from-primary/30 to-transparent"></div>
+                    <img alt="Tech background" class="w-full h-full object-cover opacity-30"
+                        data-alt="Abstract futuristic digital security pattern"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKRLPKD00BrD1zG-lLDSGkKGpCbOeRpdAt_NAc04fGFU_hlnsLIDRuSMOYQrdXBqjmUhM_kCayuCYKjY3gG4jjRIyytp-WyfxTfvIT7iwx4ohgNapP_FyXGejNgpFcP3C_L3QuiAGhEVvlJkDNNodCG9eNF6e1-Pr19_g7xe-_Lqn9YtS-e_JsuoslXLp1fBdK-yuDslrUbO9MHT57CUYRoR2b2p-ltnPoR9hKcTwHIYhmX1DP0dthpO8lu-dI4ymieCMYjBAykrY" />
+                </div>
+            </div>
+        </section>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <span class="material-icons-round text-secondary">public</span>
+                        Public Assets (ERC20)
+                    </h3>
+                    <button class="text-sm text-slate-400 hover:text-white transition-colors">View All</button>
+                </div>
+                <div class="glass-card rounded-xl overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-white/5 text-slate-400 text-xs uppercase tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4 font-semibold">Asset</th>
+                                <th class="px-6 py-4 font-semibold">Balance</th>
+                                <th class="px-6 py-4 font-semibold">Value</th>
+                                <th class="px-6 py-4 font-semibold text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                                            <img alt="ETH" class="w-5 h-5"
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUlJZ4M1XE5_wiq9_3LS6DYteb1VSr4rCnCfbduILHNRn2tT8EOaJBHycmCF3vdRkFoDA8M-fHFQSlsYDYM3reorkuVi1K_18zJYVvtp2OJjqW7_vtISZsJsYzyLg9HnoDuwR8r6mfALTXldL2stL4Y527N99VS2k7gsw8kIdK46rjTjH-zPb7RLnIhE6sKLBSJXn_5cb7b7TP0eQFRcy2kWE6mDL8n1qDwgM5QL91CIn7vI-jtPHvRflCg0btUxJLEcDlnO7Kvb0" />
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-white">ETH</div>
+                                            <div class="text-xs text-slate-500">Ethereum</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-white font-medium">4.25 ETH</td>
+                                <td class="px-6 py-5 text-slate-400">$10,420.10</td>
+                                <td class="px-6 py-5 text-right">
+                                    <button
+                                        class="px-4 py-1.5 rounded-full border border-primary/30 text-primary text-xs font-bold hover:bg-primary hover:text-background-dark transition-all">WRAP</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                                            <img alt="USDC" class="w-5 h-5"
+                                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8oW70ayFdoYj-z6puwF_YtDt-BSctdGNIZ2foR1ElWZUR90xadpFlPavsRpVMYC0Xif6tiweSoD4xQ3yDk-3NK4aR_aTuqGPOt_LpBmWi6_tA8mAUQ3HzVQPzLg3PsOMjHaZWgBk76vkP-Bq6o8zJ8-jDUTZHDo9LJXx03PKriJVQvvrXVxRThLb3Y27uYGFIR12RzUsFMkt9UNmwFpDcO0pRlz1HCFhsL4Yqp2LmsxuAObisukzQSgSbiuULIE6Xg_j8yBjmK_k" />
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-white">USDC</div>
+                                            <div class="text-xs text-slate-500">USD Coin</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-white font-medium">12,500.00</td>
+                                <td class="px-6 py-5 text-slate-400">$12,500.00</td>
+                                <td class="px-6 py-5 text-right">
+                                    <button
+                                        class="px-4 py-1.5 rounded-full border border-primary/30 text-primary text-xs font-bold hover:bg-primary hover:text-background-dark transition-all">WRAP</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <span class="material-icons-round text-primary">visibility_off</span>
+                        Protected (FHERC20)
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-500">Encryption Active</span>
+                        <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl overflow-hidden border-primary/30 shadow-2xl shadow-primary/5">
+                    <table class="w-full text-left">
+                        <thead class="bg-primary/5 text-primary text-xs uppercase tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4 font-semibold">Confidential Asset</th>
+                                <th class="px-6 py-4 font-semibold">Encrypted Balance</th>
+                                <th class="px-6 py-4 font-semibold text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-primary/10">
+                            <tr class="bg-primary/[0.02] hover:bg-primary/[0.05] transition-colors">
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/40">
+                                            <span class="material-icons-round text-primary text-sm">security</span>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-white">fheETH</div>
+                                            <div class="text-xs text-slate-500">Encrypted Ethereum</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <div class="flex items-center gap-2 group cursor-pointer">
+                                        <span
+                                            class="text-white font-mono bg-white/5 px-2 py-1 rounded blur-sm">85.4210</span>
+                                        <span class="material-icons-round text-slate-600 text-sm">lock</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <button
+                                            class="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white"
+                                            title="Decrypt View">
+                                            <span class="material-icons-round text-sm">visibility</span>
+                                        </button>
+                                        <button
+                                            class="px-4 py-1.5 rounded-full bg-primary text-background-dark text-xs font-bold hover:opacity-90 transition-all glow-primary">UNWRAP</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="mt-20 border-t border-white/5 bg-background-dark py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                    <span class="material-icons-round text-background-dark text-sm font-bold">lock</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-white">PASSERC</span>
+            </div>
+            <div class="flex gap-8 text-sm text-slate-500">
+                <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+                <a class="hover:text-primary transition-colors" href="#">Documentation</a>
+                <a class="hover:text-primary transition-colors" href="#">GitHub</a>
+                <a class="hover:text-primary transition-colors" href="#">Discord</a>
+            </div>
+            <div class="text-slate-600 text-sm">
+                © 2026 PASSERC Labs. Powered by Fhenix FHE.
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

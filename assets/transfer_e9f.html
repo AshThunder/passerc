@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Confidential Transfer Interface | PASSERC</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00ffa2",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#0f231c",
+                        "charcoal": "#0a0a0a",
+                        "deep-purple": "#1a0b2e",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background: radial-gradient(circle at 10% 20%, rgba(107, 79, 187, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 255, 162, 0.05) 0%, transparent 40%),
+                        #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(0, 255, 162, 0.3);
+        }
+
+        .neon-border-pulse {
+            border: 2px solid #00ffa2;
+            box-shadow: 0 0 10px rgba(0, 255, 162, 0.4);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: rgba(0, 255, 162, 0.1);
+            height: 8px;
+            border-radius: 999px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #00ffa2;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 162, 0.6);
+        }
+
+        .ciphertext-mask {
+            font-family: monospace;
+            letter-spacing: 0.2em;
+        }
+    </style>
+</head>
+<body class="font-display text-white selection:bg-primary/30">
+<!-- Navigation -->
+<nav class="flex items-center justify-between px-12 py-8 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark font-bold">shield_with_heart</span>
+</div>
+<span class="text-xl font-bold tracking-tight">PASSERC</span>
+</div>
+<div class="flex items-center gap-6">
+<span class="text-sm text-primary/60">Network: Mainnet FHE-01</span>
+<div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">notifications</span>
+</div>
+</div>
+</nav>
+<!-- Main Container -->
+<main class="max-w-4xl mx-auto px-6 py-12">
+<header class="text-center mb-16">
+<h1 class="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-primary/50">
+                Confidential Transfer
+            </h1>
+<p class="text-primary/60 text-lg">Fully Homomorphic Encrypted asset distribution</p>
+</header>
+<div class="space-y-8">
+<!-- Recipient Section -->
+<section class="space-y-4">
+<label class="block text-sm font-medium text-primary/80 ml-6">RECIPIENT ADDRESS</label>
+<div class="relative group">
+<input class="w-full bg-white/5 border border-white/10 rounded-full px-8 py-6 text-xl focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all placeholder:text-white/20" placeholder="0x... or ENS handle" type="text"/>
+<div class="absolute right-6 top-1/2 -translate-y-1/2 flex gap-2">
+<button class="p-2 hover:bg-white/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-white/40">contact_page</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Amount Section -->
+<section class="glass-card rounded-xl p-8 space-y-8">
+<div class="flex justify-between items-end">
+<div>
+<label class="block text-sm font-medium text-primary/80 mb-2">TRANSFER AMOUNT</label>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold">1,250.00</span>
+<span class="text-primary font-bold">PASSERC</span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-sm text-white/40 block">EST. FEE</span>
+<span class="text-sm font-mono">0.00042 ETH</span>
+</div>
+</div>
+<div class="relative py-4">
+<input class="w-full" max="5000" min="0" step="10" type="range"/>
+<div class="flex justify-between mt-4 text-[10px] text-white/20 font-mono tracking-widest">
+<span>MIN: 0.01</span>
+<span>MAX: 5,000.00</span>
+</div>
+</div>
+</section>
+<!-- Security Verification Card -->
+<section class="glass-card rounded-xl p-8 relative overflow-hidden">
+<!-- Background Decoration -->
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="flex items-start gap-6 relative z-10">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center shrink-0 border border-primary/20 neon-glow">
+<span class="material-symbols-outlined text-primary text-3xl">enhanced_encryption</span>
+</div>
+<div class="flex-1 space-y-6">
+<div>
+<h3 class="text-xl font-bold">Identity Verification</h3>
+<p class="text-white/40 text-sm mt-1">Your password will be encrypted as ciphertext before transit.</p>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<input class="ciphertext-mask w-full bg-black/40 border border-white/5 rounded-full px-6 py-4 focus:outline-none focus:border-primary/30 transition-all placeholder:text-white/10 text-primary" placeholder="Enter transfer password" type="password"/>
+<span class="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 text-white/20 text-sm">lock</span>
+</div>
+<!-- FHE Meta Info -->
+<div class="flex items-center gap-3 px-2">
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/40"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/40"></div>
+</div>
+<span class="text-[10px] font-mono text-primary/60 uppercase tracking-tighter">FHE Computational Layer Ready</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Button -->
+<div class="pt-8 text-center">
+<button class="neon-border-pulse group relative w-full bg-primary text-background-dark font-bold text-lg py-6 rounded-full transition-all hover:scale-[1.01] active:scale-[0.98]">
+<div class="flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">bolt</span>
+<span>INITIATE CONFIDENTIAL TRANSFER</span>
+</div>
+<!-- Subtle pulsing overlay for 'active computation' effect -->
+<div class="absolute inset-0 rounded-full bg-white/20 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+<p class="mt-6 text-white/30 text-xs flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                    Transactions are processed using Fully Homomorphic Encryption to ensure total privacy.
+                </p>
+</div>
+</div>
+<!-- System Stats -->
+<footer class="mt-24 grid grid-cols-3 gap-8 px-8 py-8 border-t border-white/5">
+<div class="space-y-1">
+<span class="text-[10px] text-white/20 uppercase tracking-widest font-bold">Encryption Status</span>
+<p class="text-primary text-xs flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                    ACTIVE: 256-bit AES + FHE
+                </p>
+</div>
+<div class="space-y-1 text-center">
+<span class="text-[10px] text-white/20 uppercase tracking-widest font-bold">Relay Speed</span>
+<p class="text-white/60 text-xs">142ms Latency</p>
+</div>
+<div class="space-y-1 text-right">
+<span class="text-[10px] text-white/20 uppercase tracking-widest font-bold">Node Identity</span>
+<p class="text-white/60 text-xs font-mono">#FF-092-A-PASSERC</p>
+</div>
+</footer>
+</main>
+<!-- Decorative Elements -->
+<div class="fixed bottom-0 left-0 p-12 opacity-10 pointer-events-none">
+<img alt="abstract circuit pattern" class="w-64 h-64 object-cover rounded-full mix-blend-screen" data-alt="abstract tech circuit pattern in neon green" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcpzhpi8fBrIbLU_8FCY_3POuOkIul1-quDHWfsjdagP1b3mMvS88OZrLlNQ3Ev4dMzLt_quJHD3Er_3MRl6MK0MXdlFsyGywr_t1hwCyPiu0gB_RicqW3wXg7VlzLY_QIbhfqIz8j3jdzIPFzsLSszMnJeQ6s9CswjvMh0kIj6c03Ycp7Lm_655GIVzu6aDqbCHkQDccH_YkRpywibK8VRlOiVrlC0_oDsOtJD_e_IVRJcVTXE1-IVx45smBZBLbkGDea4jBv2dY"/>
+</div>
+</body></html>

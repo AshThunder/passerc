@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>PASSERC | Transaction History</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#00ffa2",
+            "background-light": "#f5f8f7",
+            "background-dark": "#0f231c",
+            "charcoal": "#121212",
+            "neutral-800": "#1a2e26",
+            "neutral-700": "#243b32",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk"]
+          },
+          borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #0f231c;
+      /* Using theme background dark */
+    }
+
+    .glow-shield {
+      filter: drop-shadow(0 0 8px #00ffa2);
+    }
+
+    .encrypted-blur {
+      filter: blur(4px);
+      transition: filter 0.3s ease;
+    }
+
+    .encrypted-blur:hover {
+      filter: blur(0px);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f231c;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #243b32;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+  <!-- Header Navigation -->
+  <nav
+    class="border-b border-primary/10 bg-background-light/50 dark:bg-background-dark/50 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+            <span class="material-icons text-background-dark font-bold">security</span>
+          </div>
+          <span class="text-2xl font-bold tracking-tighter text-slate-900 dark:text-white">PASSERC</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium opacity-70">
+          <a class="hover:text-primary transition-colors" href="#">Dashboard</a>
+          <a class="text-primary" href="#">Transactions</a>
+          <a class="hover:text-primary transition-colors" href="#">Privacy Bridge</a>
+          <a class="hover:text-primary transition-colors" href="#">Staking</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="px-4 py-2 bg-primary/10 border border-primary/20 rounded-full flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+          <span class="text-xs font-mono text-primary">0x71C...4f2E</span>
+        </div>
+        <button
+          class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-neutral-700 transition-colors">
+          <span class="material-icons text-sm">settings</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <!-- Page Header & Stats -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+      <div>
+        <h1 class="text-4xl font-bold mb-2">Transaction History</h1>
+        <p class="text-slate-500 dark:text-slate-400">View and manage your FHE-secured on-chain activities.</p>
+      </div>
+      <div class="flex gap-4">
+        <div class="bg-neutral-800/50 p-4 rounded-xl border border-primary/10 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+            <span class="material-icons text-primary text-xl">verified_user</span>
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-wider opacity-50">Private Balance</div>
+            <div class="text-xl font-bold">14,205.50 PSRC</div>
+          </div>
+        </div>
+        <div class="bg-neutral-800/50 p-4 rounded-xl border border-primary/10 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+            <span class="material-icons text-primary text-xl">visibility_off</span>
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-wider opacity-50">Shielded Rate</div>
+            <div class="text-xl font-bold">94.2%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Filters Bar -->
+    <div
+      class="bg-neutral-800/30 p-4 rounded-2xl border border-primary/5 mb-6 flex flex-wrap items-center justify-between gap-4">
+      <div
+        class="flex flex-1 min-w-[300px] items-center bg-background-dark border border-neutral-700 rounded-full px-4 py-2 focus-within:border-primary transition-colors">
+        <span class="material-icons text-slate-500 text-lg mr-2">search</span>
+        <input class="bg-transparent border-none focus:ring-0 text-sm w-full font-display"
+          placeholder="Search by TX Hash, Asset or Address..." type="text" />
+      </div>
+      <div class="flex items-center gap-3">
+        <div
+          class="flex items-center gap-2 bg-background-dark border border-neutral-700 px-4 py-2 rounded-full cursor-pointer hover:border-primary/50 transition-colors">
+          <span class="text-sm font-medium">All Types</span>
+          <span class="material-icons text-sm">expand_more</span>
+        </div>
+        <div class="h-8 w-px bg-neutral-700 mx-2"></div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input checked="" class="sr-only peer" type="checkbox" value="" />
+          <div
+            class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+          </div>
+          <span class="ms-3 text-sm font-medium">Confidential Only</span>
+        </label>
+      </div>
+    </div>
+    <!-- Transactions Table -->
+    <div class="bg-neutral-800/20 border border-primary/5 rounded-2xl overflow-hidden backdrop-blur-sm">
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-primary/10">
+              <th class="px-6 py-5 text-xs uppercase tracking-widest font-semibold opacity-50">Date</th>
+              <th class="px-6 py-5 text-xs uppercase tracking-widest font-semibold opacity-50">Type</th>
+              <th class="px-6 py-5 text-xs uppercase tracking-widest font-semibold opacity-50">Asset</th>
+              <th class="px-6 py-5 text-xs uppercase tracking-widest font-semibold opacity-50 text-right">Amount</th>
+              <th class="px-6 py-5 text-xs uppercase tracking-widest font-semibold opacity-50 text-center">Status</th>
+              <th class="px-6 py-5 text-xs uppercase tracking-widest font-semibold opacity-50">TX Hash</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-primary/5">
+            <!-- Private Row 1 -->
+            <tr class="hover:bg-primary/5 transition-colors group">
+              <td class="px-6 py-6">
+                <div class="text-sm">Oct 24, 2023</div>
+                <div class="text-[10px] opacity-40">14:22:10 UTC</div>
+              </td>
+              <td class="px-6 py-6">
+                <span
+                  class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-semibold">Transfer</span>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-full bg-primary/30 flex items-center justify-center overflow-hidden">
+                    <img class="w-full h-full object-cover" data-alt="Abstract crypto token icon"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ60-N0dBB77dzOs-PPf5wPHJJf3D_0kc58nT71-tYercTe40XZrHTTgoUGum4LMWbHrHOqgoCn63J1WmsWvJRUYmeRTtTgRciC7iR-hsx4yauAKggLiwrF_IY2C_gIrjWXnKHZZlUmuXMDqkERVo8M3BXwXMkQUOBRlGRf16e5K4T-hzDMcfbx4zuEwq8hstiA60E1O59pXZpHVdkgEhHqi2hOaEy5tXz08zsLp03X9uKTGzw3YOwcktdhtJjdq8EjNW853dd_uU" />
+                  </div>
+                  <span class="text-sm font-bold">PSRC</span>
+                </div>
+              </td>
+              <td class="px-6 py-6 text-right">
+                <div
+                  class="text-primary font-mono font-medium tracking-tight bg-primary/10 px-2 py-1 rounded inline-block">
+                  Encrypted_FHE</div>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex justify-center">
+                  <div class="flex items-center gap-2 text-primary glow-shield">
+                    <span class="material-icons text-xl">shield</span>
+                    <span class="text-xs font-bold tracking-tight">PRIVATE</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-6">
+                <div
+                  class="flex items-center gap-2 font-mono text-xs opacity-40 group-hover:opacity-100 transition-opacity">
+                  <span>0x4f...9d21</span>
+                  <span class="material-icons text-xs cursor-pointer hover:text-primary">content_copy</span>
+                </div>
+              </td>
+            </tr>
+            <!-- Private Row 2 -->
+            <tr class="hover:bg-primary/5 transition-colors group">
+              <td class="px-6 py-6">
+                <div class="text-sm">Oct 24, 2023</div>
+                <div class="text-[10px] opacity-40">11:05:44 UTC</div>
+              </td>
+              <td class="px-6 py-6">
+                <span
+                  class="px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full text-xs font-semibold">Deposit</span>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden">
+                    <img class="w-full h-full object-cover" data-alt="Ethereum logo icon"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTT_SGLZQIYZjlejM6YNMblJmO0BaL7k6FSYSaYauxxc1PcNOTeUeUI7Fdzr4Rm0FWAM3aK2u1OplSkKz3zjvOmgxfqdtDntB41k1kSKWn1j3SstvzLHJ_Ua4OTLH-_8ZCjXGdqzWl35raeiDq8gs_Xv9lqSdHErmRryuXaxYpdE-I-fi3bjvfjRP_Xo9MBuxTC5Lb114CRgmGALBBsWc2_stR9KgPq3n0hrHlN2TIlw6TdKZqlWcfAnJ0PrIm9nxu0mEA2FRLllo" />
+                  </div>
+                  <span class="text-sm font-bold">ETH</span>
+                </div>
+              </td>
+              <td class="px-6 py-6 text-right">
+                <div class="text-sm font-bold">12.450 ETH</div>
+                <div class="text-[10px] opacity-40">≈ $22,410.00</div>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex justify-center">
+                  <div class="flex items-center gap-2 text-primary glow-shield">
+                    <span class="material-icons text-xl">shield</span>
+                    <span class="text-xs font-bold tracking-tight">PRIVATE</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-6">
+                <div
+                  class="flex items-center gap-2 font-mono text-xs opacity-40 group-hover:opacity-100 transition-opacity">
+                  <span>0x9a...331b</span>
+                  <span class="material-icons text-xs cursor-pointer hover:text-primary">content_copy</span>
+                </div>
+              </td>
+            </tr>
+            <!-- Public Row -->
+            <tr class="hover:bg-primary/5 transition-colors group">
+              <td class="px-6 py-6">
+                <div class="text-sm">Oct 23, 2023</div>
+                <div class="text-[10px] opacity-40">22:15:02 UTC</div>
+              </td>
+              <td class="px-6 py-6">
+                <span
+                  class="px-3 py-1 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 rounded-full text-xs font-semibold">Withdraw</span>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden">
+                    <img class="w-full h-full object-cover" data-alt="Abstract crypto token icon"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5-WMxCH3sIOKbHhKYbi1kT3S14AGK81iHAY6cwVp9VzSnKkDkHKScX3Sy2sgsQPNubrRr49yF-QlZIEI3UslvSE1_w2xnx5wF2vbuyzhfqb49BiFNYHVl-k2GVj5TZyJo4TDM3UZXXF25kBvWMlLSlh5ecz789_YDCK5oBvWdM9zkqhMxW_NzAy1jJYY-XrjvhulhH-gXOYryvSjLYeN9bjrJRKK1jLkA0tdqPesJhmLZD88LBs1ufXdX1EWAyU61BqSoBXCa_KI" />
+                  </div>
+                  <span class="text-sm font-bold">PSRC</span>
+                </div>
+              </td>
+              <td class="px-6 py-6 text-right">
+                <div class="text-sm font-bold">5,000.00 PSRC</div>
+                <div class="text-[10px] opacity-40">≈ $5,000.00</div>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex justify-center">
+                  <div class="flex items-center gap-2 opacity-30">
+                    <span class="material-icons text-xl">public</span>
+                    <span class="text-xs font-bold tracking-tight">PUBLIC</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-6">
+                <div
+                  class="flex items-center gap-2 font-mono text-xs opacity-40 group-hover:opacity-100 transition-opacity">
+                  <span>0x2d...88c4</span>
+                  <span class="material-icons text-xs cursor-pointer hover:text-primary">content_copy</span>
+                </div>
+              </td>
+            </tr>
+            <!-- Private Row 3 -->
+            <tr class="hover:bg-primary/5 transition-colors group">
+              <td class="px-6 py-6">
+                <div class="text-sm">Oct 23, 2023</div>
+                <div class="text-[10px] opacity-40">09:30:11 UTC</div>
+              </td>
+              <td class="px-6 py-6">
+                <span
+                  class="px-3 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full text-xs font-semibold">Convert</span>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden">
+                    <img class="w-full h-full object-cover" data-alt="Ethereum logo icon"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWCWdYGQIpE2gm3j-dw6iBcsdOGtJxE7FhrXctZYWWl36uBF-qmRNbg4rxE7cVulfWm6-dW3Tzq0d_zF_7J_G5UwJvSDlrBEAvlhHppiCfTaytVr-KMtEP02TvmpsXbsyYhEn-WwEvRbaS5SFNS9yD02YiWGxiZh-CrG_fEuT_ZAh9-wJ_Wao4PFvVUQ1rWBVHdD2S3ogDsUQ1-5q4Df7382jzNR2B-6YjD08NiEQ7AODHLTQ1AN_-UIsozpgJVE3w0TMjY0trLms" />
+                  </div>
+                  <span class="text-sm font-bold">ETH</span>
+                </div>
+              </td>
+              <td class="px-6 py-6 text-right">
+                <div
+                  class="text-primary font-mono font-medium tracking-tight bg-primary/10 px-2 py-1 rounded inline-block">
+                  Encrypted_FHE</div>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex justify-center">
+                  <div class="flex items-center gap-2 text-primary glow-shield">
+                    <span class="material-icons text-xl">shield</span>
+                    <span class="text-xs font-bold tracking-tight">PRIVATE</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-6">
+                <div
+                  class="flex items-center gap-2 font-mono text-xs opacity-40 group-hover:opacity-100 transition-opacity">
+                  <span>0xef...12ea</span>
+                  <span class="material-icons text-xs cursor-pointer hover:text-primary">content_copy</span>
+                </div>
+              </td>
+            </tr>
+            <!-- Private Row 4 -->
+            <tr class="hover:bg-primary/5 transition-colors group border-b-0">
+              <td class="px-6 py-6">
+                <div class="text-sm">Oct 22, 2023</div>
+                <div class="text-[10px] opacity-40">18:44:59 UTC</div>
+              </td>
+              <td class="px-6 py-6">
+                <span
+                  class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-semibold">Transfer</span>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex items-center gap-2">
+                  <div class="w-8 h-8 rounded-full bg-primary/30 flex items-center justify-center overflow-hidden">
+                    <img class="w-full h-full object-cover" data-alt="Abstract crypto token icon"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb1YPq5sx67V1y-zpCtSI_10PaB8mbPCvck_EBdrhDG_SdgvvV9LfVU9FqhUqYzFNKEYmfyeXloJ_J-YodtHQQg0618oyhKaL3crm40sHjdhb5ku4Mid2nejxumNCEm26kWqb29c4Sgt4lawdkTw4OKR3DlcQAxGtq8AQ6Zqkg6Mht6RxJITC5CAe_HeLbZoJ_Mbx1dGLGq46srWOdcdPsVV0ynLyxdtTOr6p1OWsj4oogaAd8kBi7Q8T_GMYWQoeQ-KL-9moO1oQ" />
+                  </div>
+                  <span class="text-sm font-bold">PSRC</span>
+                </div>
+              </td>
+              <td class="px-6 py-6 text-right">
+                <div
+                  class="text-primary font-mono font-medium tracking-tight bg-primary/10 px-2 py-1 rounded inline-block">
+                  Encrypted_FHE</div>
+              </td>
+              <td class="px-6 py-6">
+                <div class="flex justify-center">
+                  <div class="flex items-center gap-2 text-primary glow-shield">
+                    <span class="material-icons text-xl">shield</span>
+                    <span class="text-xs font-bold tracking-tight">PRIVATE</span>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-6">
+                <div
+                  class="flex items-center gap-2 font-mono text-xs opacity-40 group-hover:opacity-100 transition-opacity">
+                  <span>0xbc...776d</span>
+                  <span class="material-icons text-xs cursor-pointer hover:text-primary">content_copy</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Pagination -->
+    <div class="mt-8 flex items-center justify-between">
+      <p class="text-sm opacity-50">Showing 1 to 5 of 142 private records</p>
+      <div class="flex items-center gap-2">
+        <button
+          class="w-10 h-10 rounded-full border border-primary/10 flex items-center justify-center hover:bg-primary/10 transition-colors disabled:opacity-20"
+          disabled="">
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <button
+          class="w-10 h-10 rounded-full bg-primary text-background-dark font-bold flex items-center justify-center">1</button>
+        <button
+          class="w-10 h-10 rounded-full border border-primary/10 flex items-center justify-center hover:bg-primary/10 transition-colors">2</button>
+        <button
+          class="w-10 h-10 rounded-full border border-primary/10 flex items-center justify-center hover:bg-primary/10 transition-colors">3</button>
+        <button
+          class="w-10 h-10 rounded-full border border-primary/10 flex items-center justify-center hover:bg-primary/10 transition-colors">
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+    </div>
+    <!-- Privacy Banner -->
+    <div
+      class="mt-16 bg-gradient-to-r from-primary/10 to-transparent border border-primary/20 rounded-3xl p-8 relative overflow-hidden">
+      <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex gap-6 items-center">
+          <div
+            class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(0,255,162,0.3)]">
+            <span class="material-icons text-background-dark text-3xl">lock</span>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold">Fully Homomorphic Encryption Active</h3>
+            <p class="text-slate-400 text-sm max-w-md">Your transaction metadata is mathematically secured. Only you can
+              decrypt and view the underlying amounts and counterparts.</p>
+          </div>
+        </div>
+        <button
+          class="bg-primary text-background-dark px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+          Audit My Data
+        </button>
+      </div>
+      <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+    </div>
+  </main>
+  <footer class="mt-20 border-t border-primary/10 py-12">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+          <span class="material-icons text-background-dark text-sm font-bold">security</span>
+        </div>
+        <span class="text-xl font-bold tracking-tighter">PASSERC</span>
+      </div>
+      <div class="flex gap-8 text-sm opacity-50">
+        <a class="hover:text-primary transition-colors" href="#">Documentation</a>
+        <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+        <a class="hover:text-primary transition-colors" href="#">Security Audit</a>
+        <a class="hover:text-primary transition-colors" href="#">Network Status</a>
+      </div>
+      <p class="text-xs opacity-30 font-mono">© 2026 PASSERC Protocol. FHE-Secured.</p>
+    </div>
+  </footer>
+</body>
+
+</html>

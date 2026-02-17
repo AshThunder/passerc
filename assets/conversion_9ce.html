@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>PASSERC Conversion Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00ffa2",
+                        "background-light": "#f5f8f7",
+                        "background-dark": "#0b120f",
+                        "surface-dark": "#16241f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(0, 255, 162, 0.3);
+        }
+
+        .neon-border {
+            border: 1px solid rgba(0, 255, 162, 0.2);
+        }
+
+        .fhe-gradient {
+            background: linear-gradient(135deg, rgba(0, 255, 162, 0.1) 0%, rgba(0, 255, 162, 0) 100%);
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            background: rgba(22, 36, 31, 0.8);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+    <!-- Navigation -->
+    <nav class="border-b border-primary/10 px-8 py-6 flex justify-between items-center glass-panel sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-background-dark font-bold">shield_lock</span>
+            </div>
+            <span class="text-2xl font-bold tracking-tighter">PASSERC<span class="text-primary">.</span></span>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium uppercase tracking-widest text-slate-400">
+            <a class="hover:text-primary transition-colors" href="#">Swap</a>
+            <a class="text-primary" href="#">Convert</a>
+            <a class="hover:text-primary transition-colors" href="#">Stake</a>
+            <a class="hover:text-primary transition-colors" href="#">Fhenix Explorer</a>
+        </div>
+        <button
+            class="bg-primary/10 border border-primary/30 text-primary px-6 py-2 rounded-full font-bold hover:bg-primary hover:text-background-dark transition-all duration-300">
+            0x71C...4f92
+        </button>
+    </nav>
+    <main class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+        <!-- Abstract Background Elements -->
+        <div class="absolute top-1/4 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px]"></div>
+        <div class="w-full max-w-[480px] space-y-6 relative z-10">
+            <!-- Header Text -->
+            <div class="text-center space-y-2 mb-8">
+                <h1 class="text-4xl font-bold tracking-tight">Encryption Portal</h1>
+                <p class="text-slate-400">Migrate your assets to the private Fhenix ecosystem.</p>
+            </div>
+            <!-- Conversion Widget -->
+            <div class="glass-panel border border-primary/20 rounded-xl p-6 shadow-2xl">
+                <!-- Input Asset Section -->
+                <div class="space-y-4 mb-6">
+                    <div
+                        class="flex justify-between items-center text-xs uppercase tracking-widest text-slate-500 font-bold px-1">
+                        <span>Input Asset</span>
+                        <span>Balance: 12.45 ETH</span>
+                    </div>
+                    <div class="bg-background-dark/50 border border-white/5 p-4 rounded-lg flex items-center gap-4">
+                        <div
+                            class="flex items-center gap-2 bg-white/5 hover:bg-white/10 transition-colors px-3 py-2 rounded-full cursor-pointer border border-white/10">
+                            <img alt="" class="w-6 h-6" data-alt="Ethereum cryptocurrency logo symbol"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdsQXxc0QaHWZrDaDIjeKAi2EaLXCZyyXCCbB_DRP-yyxT24AIN1CHCLCMg7twyawm_cldXLtjvZYCeRQqczPsq4q_XxrzhbrvXauwmvM9M8ikveLKDlBMSC0BZeOxahJBRHCXbZ7VqytKa20bwcjq7w8KqhlI8EeGMytPjs0qtdx3e5KQT1aEYo6GHT2_QIDuz-rsWzbFqboGujbvl2TGlDLh8ozSYRQTfYuiFNk8pBqjfuEkGp3MDDGkxBPBAlHkeSHyhgELhks" />
+                            <span class="font-bold">ETH</span>
+                            <span class="material-symbols-outlined text-sm">expand_more</span>
+                        </div>
+                        <input
+                            class="bg-transparent border-none focus:ring-0 text-3xl font-bold w-full text-right placeholder:text-slate-700"
+                            placeholder="0.00" type="number" />
+                    </div>
+                </div>
+                <!-- Divider Icon -->
+                <div class="flex justify-center -my-6 relative z-20">
+                    <div
+                        class="bg-background-dark border border-primary/30 w-12 h-12 rounded-full flex items-center justify-center text-primary shadow-lg">
+                        <span class="material-symbols-outlined">arrow_downward</span>
+                    </div>
+                </div>
+                <!-- Security Setup Card -->
+                <div class="mt-8 mb-8">
+                    <div
+                        class="fhe-gradient border border-primary/40 rounded-lg p-5 space-y-4 relative overflow-hidden">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary neon-glow">enhanced_encryption</span>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-primary">FHE Security Setup</h3>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-slate-400 px-1">ENCRYPTION PASSWORD</label>
+                            <div class="relative">
+                                <input
+                                    class="w-full bg-background-dark/80 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary rounded-full px-5 py-3 text-primary placeholder:text-primary/20 font-mono tracking-widest"
+                                    placeholder="••••••••••••" type="password" />
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-primary/40">
+                                    <span
+                                        class="material-symbols-outlined cursor-pointer hover:text-primary">visibility</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2 text-[10px] text-slate-400 leading-tight">
+                            <span class="material-symbols-outlined text-xs text-primary mt-0.5">info</span>
+                            <p>This password generates your private state on Fhenix. Your assets will be encrypted using
+                                Fully Homomorphic Encryption, remaining confidential even while being processed.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Output Info -->
+                <div class="bg-white/5 rounded-lg p-4 space-y-2 mb-8">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">You will receive</span>
+                        <span class="font-bold text-primary">~ 12.45 pETH</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">Protocol Fee</span>
+                        <span class="text-slate-300">0.0001 ETH</span>
+                    </div>
+                    <div class="flex justify-between text-sm border-t border-white/5 pt-2 mt-2">
+                        <span class="text-slate-500">Confidentiality</span>
+                        <span class="flex items-center gap-1 text-primary text-[10px] font-bold">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            ACTIVE FHE LAYER
+                        </span>
+                    </div>
+                </div>
+                <!-- Primary CTA -->
+                <button
+                    class="w-full bg-primary text-background-dark font-bold text-lg py-4 rounded-full shadow-[0_0_30px_rgba(0,255,162,0.4)] hover:shadow-[0_0_45px_rgba(0,255,162,0.6)] hover:scale-[1.01] transition-all duration-300 active:scale-95 uppercase tracking-tighter">
+                    Convert to PASSERC
+                </button>
+            </div>
+            <!-- Footer Meta -->
+            <div class="flex justify-center gap-6">
+                <div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-help">
+                    <div class="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[14px]">bolt</span>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Powered by
+                        Fhenix</span>
+                </div>
+                <div class="flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-help">
+                    <div class="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[14px]">verified_user</span>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Audited by
+                        Quantstamp</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Support Banner -->
+    <footer class="p-8 text-center text-slate-600 text-xs tracking-widest uppercase">
+        <p>© 2026 PASSERC Labs • Secured by Fully Homomorphic Encryption</p>
+    </footer>
+    <!-- Decorative Corner Elements -->
+    <div class="fixed top-24 left-8 pointer-events-none hidden xl:block">
+        <div class="text-[10px] text-primary/30 font-mono space-y-1">
+            <p>&gt; INITIALIZING_ENCRYPTION_ENGINE...</p>
+            <p>&gt; CONNECTING_TO_FHENIX_L2...</p>
+            <p>&gt; LOADING_PRIVATE_CIRCUITS...</p>
+            <p>&gt; READY_STATE_CONFIRMED</p>
+        </div>
+    </div>
+</body>
+
+</html>
