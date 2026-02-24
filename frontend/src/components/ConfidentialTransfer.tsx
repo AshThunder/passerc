@@ -22,7 +22,18 @@ const ConfidentialTransfer: React.FC = () => {
             setStatus('Please connect wallet');
             return;
         }
-        if (!recipient || !amount || !password) return;
+        if (!recipient) {
+            setStatus('❌ Error: Input recipient address');
+            return;
+        }
+        if (!amount) {
+            setStatus('❌ Error: Input amount');
+            return;
+        }
+        if (!password) {
+            setStatus('❌ Error: Input password');
+            return;
+        }
 
         setLoading(true);
         setStatus('Encrypting & Sending Transfer...');
@@ -124,7 +135,7 @@ const ConfidentialTransfer: React.FC = () => {
                     <div>
                         <label className="block text-slate-400 text-sm font-medium mb-2 flex justify-between">
                             <span>Transfer Password (Numeric)</span>
-                            <span className="text-secondary text-xs">Required for receiver to unlock</span>
+                            <span className="text-secondary text-xs">Share this code with receiver</span>
                         </label>
                         <input
                             type="password"
