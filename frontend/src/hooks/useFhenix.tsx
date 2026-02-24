@@ -16,11 +16,11 @@ const FhenixContext = createContext<FhenixContextType>({
 });
 
 export const FhenixProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const { provider, signer } = useWallet();
+    const { provider, signer, account } = useWallet();
     const [client, setClient] = useState<typeof cofhejs | null>(null);
     const [isReady, setIsReady] = useState(false);
     const [permitHash, setPermitHash] = useState<string | null>(null);
-    const initRef = useRef(false);
+    const initRef = useRef<string | null>(null);
 
     useEffect(() => {
         if (MOCK_MODE) {
@@ -38,8 +38,8 @@ export const FhenixProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             return;
         }
 
-        if (provider && signer && !initRef.current) {
-            initRef.current = true;
+        if (provider && signer && account && initRef.current !== account) {
+            initRef.current = account;
             const initClient = async () => {
                 try {
                     console.log("[CoFHE] Initializing cofhejs...");
@@ -63,16 +63,22 @@ export const FhenixProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 } catch (err) {
                     console.error("[CoFHE] Init Failed:", err);
                     setIsReady(false);
-                    initRef.current = false;
+                    initRef.current = null;
                 }
             };
             initClient();
         }
 
+        if (!account) {
+            initRef.current = null;
+            setIsReady(false);
+            setPermitHash(null);
+        }
+
         return () => {
-            // Don't reset initRef on cleanup — we want to prevent double init
+            // Don't reset initRef on cleanup — we want to prevent double init within exact same session
         };
-    }, [provider, signer]);
+    }, [provider, signer, account]);
 
     return (
         <FhenixContext.Provider value={{ client, isReady, permitHash }}>
