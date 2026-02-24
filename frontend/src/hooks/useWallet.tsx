@@ -15,6 +15,7 @@ interface WalletContextType {
     connect: () => Promise<void>;
     isCorrectNetwork: boolean;
     switchToSepolia: () => Promise<void>;
+    disconnect: () => void;
 }
 
 const WalletContext = createContext<WalletContextType>({
@@ -24,6 +25,7 @@ const WalletContext = createContext<WalletContextType>({
     connect: async () => { },
     isCorrectNetwork: true,
     switchToSepolia: async () => { },
+    disconnect: () => { },
 });
 
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -113,8 +115,13 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
     };
 
+    const disconnect = () => {
+        setAccount(null);
+        setSigner(null);
+    };
+
     return (
-        <WalletContext.Provider value={{ account, provider, signer, connect, isCorrectNetwork, switchToSepolia }
+        <WalletContext.Provider value={{ account, provider, signer, connect, disconnect, isCorrectNetwork, switchToSepolia }
         }>
             {children}
         </WalletContext.Provider>

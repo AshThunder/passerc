@@ -8,8 +8,9 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation();
-    const { account, connect, isCorrectNetwork, switchToSepolia } = useWallet();
+    const { account, connect, disconnect, isCorrectNetwork, switchToSepolia } = useWallet();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const isActive = (path: string) => location.pathname === path;
 
@@ -56,21 +57,46 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         ))}
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={account && !isCorrectNetwork ? switchToSepolia : connect}
-                            className={`hidden sm:flex px-6 py-2.5 rounded-full transition-all items-center gap-2 text-xs uppercase tracking-wider font-black ${account && !isCorrectNetwork
-                                    ? 'bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500/30'
-                                    : 'bg-primary hover:bg-primary/90 text-[#121212] glow-primary shadow-[0_0_20px_rgba(0,255,162,0.2)]'
-                                }`}
-                        >
-                            <span className="material-icons-round text-sm">
-                                {account && !isCorrectNetwork ? 'warning' : 'account_balance_wallet'}
-                            </span>
-                            {account
-                                ? (!isCorrectNetwork ? 'Wrong Chain' : `${account.slice(0, 6)}...${account.slice(-4)}`)
-                                : 'Connect Wallet'}
-                        </button>
+                    <div className="flex items-center gap-4 relative">
+                        {account ? (
+                            <div className="relative">
+                                <button
+                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    className={`hidden sm:flex px-6 py-2.5 rounded-full transition-all items-center gap-2 text-xs uppercase tracking-wider font-black ${!isCorrectNetwork
+                                        ? 'bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500/30'
+                                        : 'bg-primary/10 border border-primary/30 hover:bg-primary/20 text-white glow-primary'
+                                        }`}
+                                >
+                                    <span className="material-icons-round text-sm text-primary">
+                                        {!isCorrectNetwork ? 'warning' : 'account_balance_wallet'}
+                                    </span>
+                                    {!isCorrectNetwork ? 'Wrong Chain' : `${account.slice(0, 6)}...${account.slice(-4)}`}
+                                    <span className="material-icons-round text-sm ml-1 opacity-50">
+                                        expand_more
+                                    </span>
+                                </button>
+
+                                {isDropdownOpen && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-surface border border-white/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2">
+                                        <button
+                                            onClick={() => { disconnect(); setIsDropdownOpen(false); }}
+                                            className="w-full text-left px-4 py-3 text-sm text-red-400 font-bold hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2"
+                                        >
+                                            <span className="material-icons-round text-sm">logout</span>
+                                            Disconnect
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <button
+                                onClick={connect}
+                                className="hidden sm:flex bg-primary hover:bg-primary/90 text-[#121212] font-black px-6 py-2.5 rounded-full transition-all items-center gap-2 glow-primary shadow-[0_0_20px_rgba(0,255,162,0.2)] text-xs uppercase tracking-wider"
+                            >
+                                <span className="material-icons-round text-sm">account_balance_wallet</span>
+                                Connect Wallet
+                            </button>
+                        )}
 
                         {/* Mobile Menu Button */}
                         <button
@@ -98,27 +124,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                     {link.name}
                                 </Link>
                             ))}
-                            <button
-                                onClick={() => {
-                                    if (account && !isCorrectNetwork) {
-                                        switchToSepolia();
-                                    } else {
-                                        connect();
-                                    }
-                                    closeMenu();
-                                }}
-                                className={`sm:hidden w-full font-black py-4 rounded-xl flex items-center justify-center gap-2 ${account && !isCorrectNetwork
-                                        ? 'bg-red-500/20 text-red-500 border border-red-500/50'
-                                        : 'bg-primary text-[#121212] glow-primary'
-                                    }`}
-                            >
-                                <span className="material-icons-round text-sm">
-                                    {account && !isCorrectNetwork ? 'warning' : 'account_balance_wallet'}
-                                </span>
-                                {account
-                                    ? (!isCorrectNetwork ? 'Switch Network' : `${account.slice(0, 6)}...${account.slice(-4)}`)
-                                    : 'Connect Wallet'}
-                            </button>
+                            {account ? (
+                                <div className="flex flex-col gap-2">
+                                    <div className={`w-full font-black py-4 rounded-xl flex items-center justify-center gap-2 ${!isCorrectNetwork ? 'bg-red-500/20 text-red-500 border border-red-500/50' : 'bg-primary/10 border border-primary/30 text-white'}`}>
+                                        <span className="material-icons-round text-sm text-primary">
+                                            {!isCorrectNetwork ? 'warning' : 'account_balance_wallet'}
+                                        </span>
+                                        {!isCorrectNetwork ? 'Switch Network' : `${account.slice(0, 6)}...${account.slice(-4)}`}
+                                    </div>
+                                    <button
+                                        onClick={() => { disconnect(); closeMenu(); }}
+                                        className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 font-black py-3 rounded-xl transition-all border border-red-500/20 flex items-center justify-center gap-2"
+                                    >
+                                        <span className="material-icons-round text-sm">logout</span>
+                                        Disconnect
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => { connect(); closeMenu(); }}
+                                    className="sm:hidden w-full bg-primary text-[#121212] font-black py-4 rounded-xl flex items-center justify-center gap-2 glow-primary"
+                                >
+                                    <span className="material-icons-round text-sm">account_balance_wallet</span>
+                                    Connect Wallet
+                                </button>
+                            )}
                         </div>
                     </div>
                 )}
