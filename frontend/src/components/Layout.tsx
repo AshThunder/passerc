@@ -157,19 +157,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {/* Wrong Network Overlay */}
             {account && !isCorrectNetwork && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#121212]/90 backdrop-blur-xl px-6">
-                    <div className="bg-surface border border-red-500/30 rounded-2xl p-8 max-w-md w-full text-center shadow-[0_0_50px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-300">
-                        <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-red-400">
+                    <div className="bg-surface border border-primary/30 rounded-2xl p-8 max-w-md w-full text-center shadow-[0_0_50px_rgba(0,255,162,0.15)] animate-in zoom-in-95 duration-300">
+                        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
                             <span className="material-icons-round text-3xl">wifi_off</span>
                         </div>
                         <h2 className="text-2xl font-black text-white mb-2 tracking-tight uppercase">Wrong Network</h2>
                         <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                            PASSERC operates exclusively on the <strong>Fhenix Sepolia</strong> network for confidential transactions. Please switch your wallet network to continue.
+                            PASSERC operates exclusively on the <strong>Ethereum Sepolia</strong> network for confidential transactions. Please switch your wallet network to continue.
                         </p>
                         <button
                             onClick={switchToSepolia}
-                            className="w-full bg-red-500 hover:bg-red-600 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(239,68,68,0.3)] uppercase tracking-widest text-sm"
+                            className="w-full bg-primary hover:bg-primary/90 text-[#121212] font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,162,0.3)] uppercase tracking-widest text-sm glow-primary"
                         >
-                            Switch to Fhenix Sepolia
+                            Switch to Ethereum Sepolia
                         </button>
                     </div>
                 </div>
