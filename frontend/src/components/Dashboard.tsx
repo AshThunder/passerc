@@ -47,13 +47,9 @@ const Dashboard: React.FC = () => {
                             throw result.error;
                         }
                     }
-                } catch (unsealErr: any) {
+                } catch (unsealErr) {
                     console.error("Unseal failed:", unsealErr);
-                    if (unsealErr?.message?.includes('sealed data not found') || unsealErr?.name === 'CofhejsError') {
-                        setPrivateBalance("0");
-                    } else {
-                        setPrivateBalance("Error");
-                    }
+                    setPrivateBalance("Error");
                 }
             } else if (!isReady) {
                 setPrivateBalance("Initializing...");

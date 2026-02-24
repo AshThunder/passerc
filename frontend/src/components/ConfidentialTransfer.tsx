@@ -135,7 +135,7 @@ const ConfidentialTransfer: React.FC = () => {
                     <div>
                         <label className="block text-slate-400 text-sm font-medium mb-2 flex justify-between">
                             <span>Transfer Password (Numeric)</span>
-                            <span className="text-secondary text-xs">Required to authorize transfer</span>
+                            <span className="text-secondary text-xs">Password required</span>
                         </label>
                         <input
                             type="password"
