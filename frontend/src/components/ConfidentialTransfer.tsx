@@ -50,23 +50,46 @@ const ConfidentialTransfer: React.FC = () => {
 
             // 1. Pre-flight check: Verify password locally
             const isProtected = await contract.isPasswordRequired(account);
-            if (isProtected) {
-                if (!permitHash) throw new Error("FHE Permit not found. Please refresh.");
-
-                const handle = await contract.getPasswordHandle(account);
-                const unsealResult = await (client as any).unseal(handle, 4);
-
-                if (unsealResult.success) {
-                    if (unsealResult.data.toString() !== password) {
-                        throw new Error("Wrong password! Please check and try again.");
-                    }
-                } else {
-                    console.error("Local unseal failed:", unsealResult.error);
-                    throw new Error(`Password check failed: ${unsealResult.error?.message || 'FHE error'}`);
-                }
+            if (!isProtected) {
+                throw new Error("You must set a password in the settings page before you can transfer funds securely.");
             }
 
-            // 2. Encrypt inputs for CoFHE
+            if (!permitHash) throw new Error("FHE Permit not found. Please refresh.");
+
+            const handle = await contract.getPasswordHandle(account);
+            const unsealResult = await (client as any).unseal(handle, 4);
+
+            if (unsealResult.success) {
+                if (unsealResult.data.toString() !== password) {
+                    throw new Error("Wrong password! Please check and try again.");
+                }
+            } else {
+                console.error("Local unseal failed:", unsealResult.error);
+                throw new Error(`Password check failed: ${unsealResult.error?.message || 'FHE error'}`);
+            }
+
+            // 2. Pre-flight check: Verify balance locally
+            const balanceHandle = await contract.balanceHandle(account);
+            const balanceHandleBigInt = BigInt(balanceHandle.toString());
+
+            if (balanceHandleBigInt === 0n) {
+                throw new Error("Insufficient balance!");
+            }
+
+            const balanceUnsealResult = await (client as any).unseal(balanceHandleBigInt, 4, undefined, permitHash);
+            if (balanceUnsealResult.success) {
+                const currentBalanceInt = parseInt(balanceUnsealResult.data.toString());
+                if (amountInt > currentBalanceInt) {
+                    throw new Error(`Insufficient private balance! You have ${currentBalanceInt} pTST, but tried to send ${amountInt}.`);
+                }
+            } else {
+                console.error("Local balance unseal failed:", balanceUnsealResult.error);
+                // We won't strictly halt here if the unseal itself fails due to FHE hiccups, but ideally it shouldn't.
+                // It's safer to throw.
+                throw new Error("Could not verify your private balance. Please refresh and try again.");
+            }
+
+            // 3. Encrypt inputs for CoFHE
             const amountItem = Encryptable.uint32(BigInt(amountInt));
             const passwordItem = Encryptable.uint32(BigInt(passwordInt));
 
@@ -75,9 +98,9 @@ const ConfidentialTransfer: React.FC = () => {
 
             const [encAmount, encPassword] = encryptResult.data;
 
-            setStatus('Step 2: Sending Encrypted Transaction...');
+            setStatus('Step 3: Sending Encrypted Transaction...');
 
-            // 2. Execute transferEncrypted(to, encAmount, encPassword)
+            // 4. Execute transferEncrypted(to, encAmount, encPassword)
             const tx = await contract.transferEncrypted(recipient, encAmount, encPassword);
             await tx.wait();
             const successMsg = '✅ Transfer Successful!';
