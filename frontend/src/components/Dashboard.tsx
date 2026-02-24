@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
                         <h2 className="text-slate-400 text-sm font-medium mb-1">Total Value Protected (TVP)</h2>
                         <div className="flex items-baseline gap-3">
                             <span className="text-5xl font-bold text-white tracking-tight">
-                                {privateBalance !== '---' ? `${privateBalance}` : '---'}
+                                {loading ? '...' : (privateBalance !== '---' ? `${privateBalance}` : '---')}
                             </span>
                             {privateBalance !== '---' && (
                                 <span className="text-xl text-primary font-semibold">pTST</span>
@@ -114,8 +114,8 @@ const Dashboard: React.FC = () => {
                         <p className="text-slate-500 mt-4 max-w-md">Your confidential assets are protected by FHE encryption.</p>
 
                         <div className="flex items-center gap-4 mt-4">
-                            <button onClick={fetchBalances} className="text-primary text-sm hover:underline flex items-center gap-1">
-                                <span className="material-icons-round text-sm">refresh</span> Refresh
+                            <button onClick={fetchBalances} disabled={loading} className={`text-primary text-sm hover:underline flex items-center gap-1 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                <span className={`material-icons-round text-sm ${loading ? 'animate-spin' : ''}`}>refresh</span> {loading ? 'Refreshing...' : 'Refresh'}
                             </button>
                             {passwordEnabled !== null && (
                                 <span className={`text-xs px-3 py-1 rounded-full ${passwordEnabled ? 'bg-primary/10 text-primary' : 'bg-slate-700 text-slate-400'}`}>
