@@ -13,6 +13,8 @@ interface WalletContextType {
     provider: ethers.BrowserProvider | ethers.JsonRpcProvider | null;
     signer: ethers.JsonRpcSigner | ethers.Wallet | null;
     connect: () => Promise<void>;
+    isCorrectNetwork: boolean;
+    switchToSepolia: () => Promise<void>;
 }
 
 const WalletContext = createContext<WalletContextType>({
@@ -20,12 +22,15 @@ const WalletContext = createContext<WalletContextType>({
     provider: null,
     signer: null,
     connect: async () => { },
+    isCorrectNetwork: true,
+    switchToSepolia: async () => { },
 });
 
 export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [account, setAccount] = useState<string | null>(null);
     const [provider, setProvider] = useState<ethers.BrowserProvider | ethers.JsonRpcProvider | null>(null);
     const [signer, setSigner] = useState<ethers.JsonRpcSigner | ethers.Wallet | null>(null);
+    const [isCorrectNetwork, setIsCorrectNetwork] = useState<boolean>(true);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -45,12 +50,15 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 }
             });
 
-            window.ethereum.on('chainChanged', () => {
+            window.ethereum.on('chainChanged', (chainId: string) => {
+                setIsCorrectNetwork(parseInt(chainId, 16) === SEPOLIA_CHAIN_ID);
                 window.location.reload();
             });
 
             // Auto-connect if already connected
             window.ethereum.request({ method: 'eth_accounts' }).then(async (accounts: string[]) => {
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                setIsCorrectNetwork(parseInt(chainId, 16) === SEPOLIA_CHAIN_ID);
                 if (accounts.length > 0) {
                     setAccount(accounts[0]);
                     const bp = new ethers.BrowserProvider(window.ethereum);
@@ -106,7 +114,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
 
     return (
-        <WalletContext.Provider value={{ account, provider, signer, connect }
+        <WalletContext.Provider value={{ account, provider, signer, connect, isCorrectNetwork, switchToSepolia }
         }>
             {children}
         </WalletContext.Provider>

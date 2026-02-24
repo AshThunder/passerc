@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation();
-    const { account, connect } = useWallet();
+    const { account, connect, isCorrectNetwork, switchToSepolia } = useWallet();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const isActive = (path: string) => location.pathname === path;
@@ -58,11 +58,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={connect}
-                            className="hidden sm:flex bg-primary hover:bg-primary/90 text-[#121212] font-black px-6 py-2.5 rounded-full transition-all items-center gap-2 glow-primary shadow-[0_0_20px_rgba(0,255,162,0.2)] text-xs uppercase tracking-wider"
+                            onClick={account && !isCorrectNetwork ? switchToSepolia : connect}
+                            className={`hidden sm:flex px-6 py-2.5 rounded-full transition-all items-center gap-2 text-xs uppercase tracking-wider font-black ${account && !isCorrectNetwork
+                                    ? 'bg-red-500/20 text-red-400 border border-red-500/50 hover:bg-red-500/30'
+                                    : 'bg-primary hover:bg-primary/90 text-[#121212] glow-primary shadow-[0_0_20px_rgba(0,255,162,0.2)]'
+                                }`}
                         >
-                            <span className="material-icons-round text-sm">account_balance_wallet</span>
-                            {account ? `${account.slice(0, 6)}...${account.slice(-4)}` : 'Connect Wallet'}
+                            <span className="material-icons-round text-sm">
+                                {account && !isCorrectNetwork ? 'warning' : 'account_balance_wallet'}
+                            </span>
+                            {account
+                                ? (!isCorrectNetwork ? 'Wrong Chain' : `${account.slice(0, 6)}...${account.slice(-4)}`)
+                                : 'Connect Wallet'}
                         </button>
 
                         {/* Mobile Menu Button */}
@@ -92,16 +99,51 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 </Link>
                             ))}
                             <button
-                                onClick={() => { connect(); closeMenu(); }}
-                                className="sm:hidden w-full bg-primary text-[#121212] font-black py-4 rounded-xl flex items-center justify-center gap-2 glow-primary"
+                                onClick={() => {
+                                    if (account && !isCorrectNetwork) {
+                                        switchToSepolia();
+                                    } else {
+                                        connect();
+                                    }
+                                    closeMenu();
+                                }}
+                                className={`sm:hidden w-full font-black py-4 rounded-xl flex items-center justify-center gap-2 ${account && !isCorrectNetwork
+                                        ? 'bg-red-500/20 text-red-500 border border-red-500/50'
+                                        : 'bg-primary text-[#121212] glow-primary'
+                                    }`}
                             >
-                                <span className="material-icons-round text-sm">account_balance_wallet</span>
-                                {account ? `${account.slice(0, 6)}...${account.slice(-4)}` : 'Connect Wallet'}
+                                <span className="material-icons-round text-sm">
+                                    {account && !isCorrectNetwork ? 'warning' : 'account_balance_wallet'}
+                                </span>
+                                {account
+                                    ? (!isCorrectNetwork ? 'Switch Network' : `${account.slice(0, 6)}...${account.slice(-4)}`)
+                                    : 'Connect Wallet'}
                             </button>
                         </div>
                     </div>
                 )}
             </nav>
+
+            {/* Wrong Network Overlay */}
+            {account && !isCorrectNetwork && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#121212]/90 backdrop-blur-xl px-6">
+                    <div className="bg-surface border border-red-500/30 rounded-2xl p-8 max-w-md w-full text-center shadow-[0_0_50px_rgba(239,68,68,0.15)] animate-in zoom-in-95 duration-300">
+                        <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-red-400">
+                            <span className="material-icons-round text-3xl">wifi_off</span>
+                        </div>
+                        <h2 className="text-2xl font-black text-white mb-2 tracking-tight uppercase">Wrong Network</h2>
+                        <p className="text-slate-400 mb-8 text-sm leading-relaxed">
+                            PASSERC operates exclusively on the <strong>Fhenix Sepolia</strong> network for confidential transactions. Please switch your wallet network to continue.
+                        </p>
+                        <button
+                            onClick={switchToSepolia}
+                            className="w-full bg-red-500 hover:bg-red-600 text-white font-black py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(239,68,68,0.3)] uppercase tracking-widest text-sm"
+                        >
+                            Switch to Fhenix Sepolia
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <main className="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
                 {children}
