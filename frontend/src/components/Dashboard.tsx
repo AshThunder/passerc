@@ -40,7 +40,18 @@ const Dashboard: React.FC = () => {
                         // No encrypted balance yet (handle is 0 means no FHE data)
                         setPrivateBalance("0");
                     } else {
-                        const result = await client.unseal(handleBigInt, 4, undefined, permitHash); // 4 = UINT32
+                        // Permanent Fix: CoFHE KMS Indexer takes a few seconds to sync new handles.
+                        // We implement a retry loop so it doesn't immediately fail.
+                        let result: any;
+                        let retries = 3;
+                        while (retries > 0) {
+                            result = await client.unseal(handleBigInt, 4); // 4 = UINT32
+                            if (result.success) break;
+                            retries--;
+                            // Wait 2.5s before retrying to give KMS time to index the Ethereum block
+                            if (retries > 0) await new Promise(r => setTimeout(r, 2500));
+                        }
+
                         if (result.success) {
                             setPrivateBalance(result.data.toString());
                         } else {
@@ -48,7 +59,7 @@ const Dashboard: React.FC = () => {
                         }
                     }
                 } catch (unsealErr) {
-                    console.error("Unseal failed:", unsealErr);
+                    console.error("Unseal failed after retries:", unsealErr);
                     setPrivateBalance("Error");
                 }
             } else if (!isReady) {
