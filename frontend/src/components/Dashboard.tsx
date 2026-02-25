@@ -15,6 +15,7 @@ const Dashboard: React.FC = () => {
     const [privateBalance, setPrivateBalance] = useState<string>('---');
     const [passwordEnabled, setPasswordEnabled] = useState<boolean | null>(null);
     const [loading, setLoading] = useState(false);
+    const [isUnsealing, setIsUnsealing] = useState(false);
     const [faucetStatus, setFaucetStatus] = useState('');
 
     const fetchBalances = async () => {
@@ -32,23 +33,25 @@ const Dashboard: React.FC = () => {
             const passContract = new ethers.Contract(CONTRACT_ADDRESSES.passERC20, PassERC20ABI.abi, runner);
 
             if (client && isReady && permitHash && account) {
-                try {
-                    const handle = await passContract.balanceHandle(account);
-                    const handleBigInt = BigInt(handle.toString());
+                // Background unseal process
+                setIsUnsealing(true);
+                const unsealBalance = async () => {
+                    try {
+                        const handle = await passContract.balanceHandle(account);
+                        const handleBigInt = BigInt(handle.toString());
 
-                    if (handleBigInt === 0n) {
-                        // No encrypted balance yet (handle is 0 means no FHE data)
-                        setPrivateBalance("0");
-                    } else {
-                        // Permanent Fix: CoFHE KMS Indexer takes a few seconds to sync new handles.
-                        // We implement a retry loop so it doesn't immediately fail.
+                        if (handleBigInt === 0n) {
+                            setPrivateBalance("0");
+                            setIsUnsealing(false);
+                            return;
+                        }
+
                         let result: any;
-                        let retries = 3;
+                        let retries = 4; // Total 10 seconds of polling buffer
                         while (retries > 0) {
                             result = await client.unseal(handleBigInt, 4); // 4 = UINT32
                             if (result.success) break;
                             retries--;
-                            // Wait 2.5s before retrying to give KMS time to index the Ethereum block
                             if (retries > 0) await new Promise(r => setTimeout(r, 2500));
                         }
 
@@ -57,11 +60,17 @@ const Dashboard: React.FC = () => {
                         } else {
                             throw result.error;
                         }
+                    } catch (unsealErr) {
+                        console.error("Unseal failed after retries:", unsealErr);
+                        setPrivateBalance("Error");
+                    } finally {
+                        setIsUnsealing(false);
                     }
-                } catch (unsealErr) {
-                    console.error("Unseal failed after retries:", unsealErr);
-                    setPrivateBalance("Error");
-                }
+                };
+
+                // Do NOT await the unseal, let it run in the background
+                unsealBalance();
+
             } else if (!isReady) {
                 setPrivateBalance("Initializing...");
             } else {
@@ -116,7 +125,7 @@ const Dashboard: React.FC = () => {
                         <h2 className="text-slate-400 text-sm font-medium mb-1">Total Value Protected (TVP)</h2>
                         <div className="flex items-baseline gap-3">
                             <span className="text-5xl font-bold text-white tracking-tight">
-                                {loading ? '...' : (privateBalance !== '---' ? `${privateBalance}` : '---')}
+                                {isUnsealing ? '...' : (privateBalance !== '---' ? `${privateBalance}` : '---')}
                             </span>
                             {privateBalance !== '---' && (
                                 <span className="text-xl text-primary font-semibold">pTST</span>
@@ -125,8 +134,8 @@ const Dashboard: React.FC = () => {
                         <p className="text-slate-500 mt-4 max-w-md">Your confidential assets are protected by FHE encryption.</p>
 
                         <div className="flex items-center gap-4 mt-4">
-                            <button onClick={fetchBalances} disabled={loading} className={`text-primary text-sm hover:underline flex items-center gap-1 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                                <span className={`material-icons-round text-sm ${loading ? 'animate-spin' : ''}`}>refresh</span> {loading ? 'Refreshing...' : 'Refresh'}
+                            <button onClick={fetchBalances} disabled={loading || isUnsealing} className={`text-primary text-sm hover:underline flex items-center gap-1 ${loading || isUnsealing ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                <span className={`material-icons-round text-sm ${loading || isUnsealing ? 'animate-spin' : ''}`}>refresh</span> {loading || isUnsealing ? 'Refreshing...' : 'Refresh'}
                             </button>
                             {passwordEnabled !== null && (
                                 <span className={`text-xs px-3 py-1 rounded-full ${passwordEnabled ? 'bg-primary/10 text-primary' : 'bg-slate-700 text-slate-400'}`}>
@@ -198,7 +207,7 @@ const Dashboard: React.FC = () => {
                             </div>
                             <div className="text-right">
                                 {account ? (
-                                    loading ? (
+                                    isUnsealing ? (
                                         <div className="animate-pulse flex flex-col items-end">
                                             <div className="h-8 w-24 bg-white/10 rounded mb-1"></div>
                                             <div className="h-3 w-16 bg-white/5 rounded"></div>

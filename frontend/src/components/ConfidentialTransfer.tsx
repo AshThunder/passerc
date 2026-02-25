@@ -167,7 +167,7 @@ const ConfidentialTransfer: React.FC = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-lg focus:outline-none focus:border-secondary/50 transition-all tracking-widest"
-                            placeholder="1234"
+                            placeholder="Input password"
                         />
                     </div>
 
