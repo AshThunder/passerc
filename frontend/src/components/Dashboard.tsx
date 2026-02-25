@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
                         let result: any;
                         let retries = 4; // Total 10 seconds of polling buffer
                         while (retries > 0) {
-                            result = await client.unseal(handleBigInt, 4); // 4 = UINT32
+                            result = await client.unseal(handleBigInt, 4, undefined, permitHash); // 4 = UINT32
                             if (result.success) break;
                             retries--;
                             if (retries > 0) await new Promise(r => setTimeout(r, 2500));

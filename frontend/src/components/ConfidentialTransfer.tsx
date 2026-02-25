@@ -57,7 +57,7 @@ const ConfidentialTransfer: React.FC = () => {
             if (!permitHash) throw new Error("FHE Permit not found. Please refresh.");
 
             const handle = await contract.getPasswordHandle(account);
-            const unsealResult = await (client as any).unseal(handle, 4);
+            const unsealResult = await (client as any).unseal(handle, 4, undefined, permitHash);
 
             if (unsealResult.success) {
                 if (unsealResult.data.toString() !== password) {
